@@ -13,8 +13,8 @@ services:
     links:
       - db
     volumes:
-      # ドキュメントルート: ./web-data/ => docker://rails:/var/www/
-      - ./web-data/:/var/www/
+      # 作業ディレクトリ: ./app/ => docker://rails:/var/www/app/
+      - ./app/:/var/www/app/
     environment:
       RAILS_ENV: development
       LANG: C.UTF-8
@@ -67,7 +67,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /usr/share/nginx/html
       - /etc/nginx/vhost.d
-      - ./certs:/etc/nginx/certs:ro # letsencryptコンテナが ./certs/ に作成したSSL証明書を読む
+      - ./docker/certs/:/etc/nginx/certs:ro # letsencryptコンテナが ./docker/certs/ に作成したSSL証明書を読む
     # restart: always # Dockerサービス起動時に自動起動
     environment:
       DHPARAM_GENERATION: "false"
@@ -81,7 +81,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /usr/share/nginx/html
       - /etc/nginx/vhost.d
-      - ./certs:/etc/nginx/certs:rw # ./certs/ にSSL証明書を書き込めるように rw モードで共有
+      - ./docker/certs/:/etc/nginx/certs:rw # ./docker/certs/ にSSL証明書を書き込めるように rw モードで共有
     depends_on:
       - nginx-proxy # nginx-proxyコンテナの後で起動
     # restart: always # Dockerサービス起動時に自動起動
